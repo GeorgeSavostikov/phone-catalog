@@ -1,21 +1,37 @@
-import React from 'react';
 import './App.scss';
+import { Outlet } from 'react-router-dom';
+import { useState } from 'react';
+import { Header } from './components/Header';
+import { Footer } from './components/Footer';
 
-interface Props {
-  onClick: () => void;
-  children: React.ReactNode;
-}
+export const App = () => {
+  const [isVisible, setIsVisible] = useState(false);
 
-export const Provider: React.FC<Props> = React.memo(({ onClick, children }) => (
-  <button type="button" onClick={onClick}>
-    {children}
-  </button>
-));
+  window.onscroll = function () {
+    if (window.scrollY >= 80) {
+      setIsVisible(true);
 
-export const App: React.FC = () => {
+      return;
+    }
+
+    setIsVisible(false);
+  };
+
   return (
-    <div className="starter">
-      <Provider onClick={() => ({})}>TodoList</Provider>
+    <div className="app">
+      <header className="app__header">
+        <Header />
+      </header>
+
+      <main className="app__main" id="myElem">
+        <div className="app__container">
+          <Outlet />
+        </div>
+      </main>
+
+      <footer className="app__footer">
+        <Footer isVisible={isVisible} />
+      </footer>
     </div>
   );
 };
